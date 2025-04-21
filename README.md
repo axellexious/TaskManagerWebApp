@@ -1,4 +1,3 @@
-# TaskManagerWebApp
 # Task Manager Web Application
 
 A PHP & MySQL-based web application for managing tasks, with user authentication and task management features.

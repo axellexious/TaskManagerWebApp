@@ -110,13 +110,10 @@ task-manager/
 - Security enhancements
 - Deployment
 
-## License
-
-This project is open-source and available under the MIT License.
 
 ## Contributors
 
-- Your Name (@yourusername)
+- James Allen M. Josue (axellexious)
 
 ## Acknowledgements
 

@@ -1,0 +1,82 @@
+/* Custom styling for Task Manager */
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.task-priority-high {
+  border-left: 4px solid #dc3545;
+}
+
+.task-priority-medium {
+  border-left: 4px solid #ffc107;
+}
+
+.task-priority-low {
+  border-left: 4px solid #0dcaf0;
+}
+
+.task-completed {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+/* Dashboard stat boxes */
+.stat-box {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.stat-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom form styling */
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Navbar customization */
+.navbar-brand {
+  font-weight: 700;
+}
+
+/* Card shadow effects */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Task list styling */
+.task-list-item {
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.task-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-group .btn {
+    border-radius: 4px !important;
+    margin-bottom: 2px;
+  }
+}

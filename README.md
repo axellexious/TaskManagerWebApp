@@ -118,3 +118,4 @@ task-manager/
 
 - Bootstrap for the frontend framework
 - PHP and MySQL communities for documentation and support
+- Myself for pushing through with this, I'll get out of this job in university and go back to the Industry wahahahahah, watch me

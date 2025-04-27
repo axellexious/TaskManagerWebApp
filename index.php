@@ -45,6 +45,21 @@ switch ($action) {
         AuthController::requireLogin();
         $tasksController->showDashboard();
         break;
+    case 'task_create':
+        $tasksController->showCreateForm();
+        break;
+    case 'task_view':
+        $tasksController->viewTask();
+        break;
+    case 'task_edit':
+        $tasksController->showEditForm();
+        break;
+    case 'task_delete':
+        $tasksController->deleteTask();
+        break;
+    case 'task_toggle_status':
+        $tasksController->toggleTaskStatus();
+        break;
     default:
         // Default to login page
         $authController->showLogin();

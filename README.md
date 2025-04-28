@@ -99,7 +99,7 @@ task-manager/
 - ✅ Basic dashboard view
 
 ### Week 2 (Ongoing)
-- Task CRUD operations
+- ✅ Task CRUD operations
 - Dashboard implementation
 - Task listing and filtering
 

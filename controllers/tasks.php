@@ -106,7 +106,7 @@ class TasksController
             exit();
         }
 
-        include 'views/tasks/view.php';
+        include 'views/tasks/list.php';
     }
 
     // Show edit task form

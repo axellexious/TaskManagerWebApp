@@ -20,6 +20,189 @@ class Task
         return $stmt->fetchAll();
     }
 
+    // Get filtered tasks for a user
+    public function getFilteredTasks($user_id, $status = null, $priority = null, $search = null, $page = 1, $limit = 10)
+    {
+        $query = "SELECT * FROM tasks WHERE user_id = :user_id";
+        $params = [':user_id' => $user_id];
+
+        // Add filters
+        if ($status) {
+            $query .= " AND status = :status";
+            $params[':status'] = $status;
+        }
+
+        if ($priority) {
+            $query .= " AND priority = :priority";
+            $params[':priority'] = $priority;
+        }
+
+        if ($search) {
+            $query .= " AND (title LIKE :search OR description LIKE :search)";
+            $params[':search'] = "%$search%";
+        }
+
+        // Add sorting
+        $query .= " ORDER BY due_date ASC";
+
+        // Add pagination
+        $offset = ($page - 1) * $limit;
+        $query .= " LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($query);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        // Bind pagination parameters
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    // Count filtered tasks for pagination
+    public function countFilteredTasks($user_id, $status = null, $priority = null, $search = null)
+    {
+        $query = "SELECT COUNT(*) FROM tasks WHERE user_id = :user_id";
+        $params = [':user_id' => $user_id];
+
+        // Add filters
+        if ($status) {
+            $query .= " AND status = :status";
+            $params[':status'] = $status;
+        }
+
+        if ($priority) {
+            $query .= " AND priority = :priority";
+            $params[':priority'] = $priority;
+        }
+
+        if ($search) {
+            $query .= " AND (title LIKE :search OR description LIKE :search)";
+            $params[':search'] = "%$search%";
+        }
+
+        $stmt = $this->db->prepare($query);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    // Get upcoming tasks (tasks due within the next 7 days)
+    public function getUpcomingTasks($user_id, $limit = 5)
+    {
+        $today = date('Y-m-d');
+        $nextWeek = date('Y-m-d', strtotime('+7 days'));
+
+        $stmt = $this->db->prepare("
+        SELECT * FROM tasks 
+        WHERE user_id = :user_id 
+        AND status = 'Pending' 
+        AND due_date BETWEEN :today AND :next_week
+        ORDER BY due_date ASC
+        LIMIT :limit
+    ");
+
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindParam(':today', $today);
+        $stmt->bindParam(':next_week', $nextWeek);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    // Log user activity
+    public function logActivity($user_id, $task_id, $action)
+    {
+        try {
+            $stmt = $this->db->prepare("
+            INSERT INTO activities (user_id, task_id, action, created_at)
+            VALUES (:user_id, :task_id, :action, NOW())
+        ");
+
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':task_id', $task_id);
+            $stmt->bindParam(':action', $action);
+
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Get recent activities
+    public function getRecentActivities($user_id, $limit = 5)
+    {
+        $stmt = $this->db->prepare("
+        SELECT a.id, a.action, a.created_at, t.title as task_title, t.id as task_id
+        FROM activities a
+        JOIN tasks t ON a.task_id = t.id
+        WHERE a.user_id = :user_id
+        ORDER BY a.created_at DESC
+        LIMIT :limit
+    ");
+
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $activities = $stmt->fetchAll();
+
+        // Format the activity data
+        foreach ($activities as &$activity) {
+            // Calculate time ago
+            $created = new DateTime($activity['created_at']);
+            $now = new DateTime();
+            $interval = $created->diff($now);
+
+            if ($interval->d > 0) {
+                $activity['time_ago'] = $interval->d . ' day' . ($interval->d > 1 ? 's' : '') . ' ago';
+            } elseif ($interval->h > 0) {
+                $activity['time_ago'] = $interval->h . ' hour' . ($interval->h > 1 ? 's' : '') . ' ago';
+            } elseif ($interval->i > 0) {
+                $activity['time_ago'] = $interval->i . ' minute' . ($interval->i > 1 ? 's' : '') . ' ago';
+            } else {
+                $activity['time_ago'] = 'just now';
+            }
+
+            // Format the action description
+            switch ($activity['action']) {
+                case 'create':
+                    $activity['description'] = 'Created task';
+                    break;
+                case 'update':
+                    $activity['description'] = 'Updated task';
+                    break;
+                case 'delete':
+                    $activity['description'] = 'Deleted task';
+                    break;
+                case 'complete':
+                    $activity['description'] = 'Completed task';
+                    break;
+                case 'reopen':
+                    $activity['description'] = 'Reopened task';
+                    break;
+                default:
+                    $activity['description'] = 'Activity on task';
+            }
+        }
+
+        return $activities;
+    }
+
+
     // Get a single task by ID
     public function getTaskById($task_id, $user_id)
     {

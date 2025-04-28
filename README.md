@@ -36,8 +36,8 @@ task-manager/
 │   ├── css/               → CSS files
 │   ├── js/                → JavaScript files
 │   └── img/               → Image files
-└── README.md              → Project documentation
-└── db-setup.php           → Database Setup Script
+├── README.md              → Project documentation
+├── db-setup.php           → Database Setup Script
 └── database.sql           → Db
 ```
 

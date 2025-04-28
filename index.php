@@ -21,7 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'login':
             $authController->login();
             break;
-        // Task-related actions will be added in Week 2
+        case 'task_create':
+            // Require login
+            AuthController::requireLogin();
+            // Call method to handle task creation
+            $tasksController->createTask();
+            break;
+        // Add other task-related POST actions here
+        case 'task_update':
+            AuthController::requireLogin();
+            $tasksController->updateTask();
+            break;
         default:
             // Redirect to login if action not found
             header('Location: index.php?action=login');

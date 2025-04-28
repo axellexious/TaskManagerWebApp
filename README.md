@@ -92,13 +92,13 @@ task-manager/
 
 ## Development Timeline
 
-### Week 1 (Current)
+### Week 1 (Done!)
 - ✅ Project structure setup
 - ✅ Database schema creation
 - ✅ User authentication system (register/login/logout)
 - ✅ Basic dashboard view
 
-### Week 2 (Next)
+### Week 2 (Ongoing)
 - Task CRUD operations
 - Dashboard implementation
 - Task listing and filtering

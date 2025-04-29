@@ -146,13 +146,14 @@ class Task
     public function getRecentActivities($user_id, $limit = 5)
     {
         $stmt = $this->db->prepare("
-        SELECT a.id, a.action, a.created_at, t.title as task_title, t.id as task_id
+        SELECT a.id, a.action, a.created_at, a.task_id,
+               IFNULL(t.title, 'Deleted task') as task_title
         FROM activities a
-        JOIN tasks t ON a.task_id = t.id
+        LEFT JOIN tasks t ON a.task_id = t.id
         WHERE a.user_id = :user_id
         ORDER BY a.created_at DESC
         LIMIT :limit
-    ");
+        ");
 
         $stmt->bindParam(':user_id', $user_id);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);

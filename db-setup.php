@@ -45,6 +45,20 @@ try {
     ");
     echo "Tasks table created.<br>";
 
+    // Create activities table
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS activities (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            task_id INT NOT NULL,
+            action VARCHAR(50) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
+        )
+    ");
+    echo "Activities table created.<br>";
+
     echo "<br>Database setup completed successfully!";
     echo "<br><a href='index.php'>Go to Application</a>";
 } catch (PDOException $e) {

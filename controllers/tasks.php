@@ -167,6 +167,9 @@ class TasksController
         // If no errors, update task
         if (empty($errors)) {
             if ($this->taskModel->updateTask($task_id, $user_id, $title, $description, $due_date, $priority, $status)) {
+
+                // Log the activity after successful update
+                $this->taskModel->logActivity($user_id, $task_id, $action);
                 $_SESSION['message'] = "Task updated successfully!";
                 header('Location: index.php?action=dashboard');
                 exit();

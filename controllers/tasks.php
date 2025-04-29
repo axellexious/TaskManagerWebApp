@@ -60,6 +60,8 @@ class TasksController
         include 'views/dashboard.php';
     }
 
+
+
     // Show create task form
     public function showCreateForm()
     {
@@ -99,7 +101,12 @@ class TasksController
 
         // If no errors, create task
         if (empty($errors)) {
-            if ($this->taskModel->createTask($user_id, $title, $description, $due_date, $priority)) {
+            $task_id = $this->taskModel->createTask($user_id, $title, $description, $due_date, $priority);
+
+            if ($task_id) {
+                // Log the activity after successful creation
+                $this->taskModel->logActivity($user_id, $task_id, 'create');
+
                 $_SESSION['message'] = "Task created successfully!";
                 header('Location: index.php?action=dashboard');
                 exit();
@@ -167,9 +174,9 @@ class TasksController
         // If no errors, update task
         if (empty($errors)) {
             if ($this->taskModel->updateTask($task_id, $user_id, $title, $description, $due_date, $priority, $status)) {
-
                 // Log the activity after successful update
                 $this->taskModel->logActivity($user_id, $task_id, $action);
+
                 $_SESSION['message'] = "Task updated successfully!";
                 header('Location: index.php?action=dashboard');
                 exit();

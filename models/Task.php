@@ -160,34 +160,45 @@ class Task
 
         $activities = $stmt->fetchAll();
 
+        // Set default timezone to match your server configuration
+        date_default_timezone_set('Asia/Manila'); // Adjust to match your local timezone (Philippines)
+
         // Format the activity data with real-time timestamps
         foreach ($activities as &$activity) {
-            // Get current time and created time as DateTime objects
+            // Get current time and created time as DateTime objects with timezone consideration
             $created = new DateTime($activity['created_at']);
             $now = new DateTime();
-            $interval = $created->diff($now);
 
-            // Calculate time ago in a more precise way
-            if ($interval->y > 0) {
-                $activity['time_ago'] = $interval->y . ' year' . ($interval->y > 1 ? 's' : '') . ' ago';
-            } elseif ($interval->m > 0) {
-                $activity['time_ago'] = $interval->m . ' month' . ($interval->m > 1 ? 's' : '') . ' ago';
-            } elseif ($interval->d > 0) {
-                if ($interval->d == 1) {
-                    $activity['time_ago'] = 'yesterday';
-                } else if ($interval->d < 7) {
-                    $activity['time_ago'] = $interval->d . ' days ago';
-                } else {
-                    $activity['time_ago'] = ceil($interval->d / 7) . ' week' . (ceil($interval->d / 7) > 1 ? 's' : '') . ' ago';
-                }
-            } elseif ($interval->h > 0) {
-                $activity['time_ago'] = $interval->h . ' hour' . ($interval->h > 1 ? 's' : '') . ' ago';
-            } elseif ($interval->i > 0) {
-                $activity['time_ago'] = $interval->i . ' minute' . ($interval->i > 1 ? 's' : '') . ' ago';
-            } elseif ($interval->s > 30) {
-                $activity['time_ago'] = $interval->s . ' seconds ago';
-            } else {
+            // Debug timestamps to check for timezone issues
+            // Uncomment if needed: error_log("Created: " . $created->format('Y-m-d H:i:s') . " | Now: " . $now->format('Y-m-d H:i:s'));
+
+            $interval = $now->getTimestamp() - $created->getTimestamp();
+
+            // Calculate time ago with a simple approach to ensure accuracy
+            if ($interval < 10) {
                 $activity['time_ago'] = 'just now';
+            } elseif ($interval < 60) {
+                $activity['time_ago'] = $interval . ' seconds ago';
+            } elseif ($interval < 3600) {
+                $minutes = floor($interval / 60);
+                $activity['time_ago'] = $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago';
+            } elseif ($interval < 86400) {
+                $hours = floor($interval / 3600);
+                $activity['time_ago'] = $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago';
+            } elseif ($interval < 172800) {
+                $activity['time_ago'] = 'yesterday';
+            } elseif ($interval < 604800) {
+                $days = floor($interval / 86400);
+                $activity['time_ago'] = $days . ' days ago';
+            } elseif ($interval < 2629743) {
+                $weeks = floor($interval / 604800);
+                $activity['time_ago'] = $weeks . ' week' . ($weeks > 1 ? 's' : '') . ' ago';
+            } elseif ($interval < 31556926) {
+                $months = floor($interval / 2629743);
+                $activity['time_ago'] = $months . ' month' . ($months > 1 ? 's' : '') . ' ago';
+            } else {
+                $years = floor($interval / 31556926);
+                $activity['time_ago'] = $years . ' year' . ($years > 1 ? 's' : '') . ' ago';
             }
 
             // Format the action description
@@ -214,7 +225,6 @@ class Task
 
         return $activities;
     }
-
 
     // Get a single task by ID
     public function getTaskById($task_id, $user_id)

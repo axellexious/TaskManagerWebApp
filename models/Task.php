@@ -142,7 +142,7 @@ class Task
         }
     }
 
-    // Get recent activities
+    // Get recent activities with real-time timestamps
     public function getRecentActivities($user_id, $limit = 5)
     {
         $stmt = $this->db->prepare("
@@ -160,19 +160,32 @@ class Task
 
         $activities = $stmt->fetchAll();
 
-        // Format the activity data
+        // Format the activity data with real-time timestamps
         foreach ($activities as &$activity) {
-            // Calculate time ago
+            // Get current time and created time as DateTime objects
             $created = new DateTime($activity['created_at']);
             $now = new DateTime();
             $interval = $created->diff($now);
 
-            if ($interval->d > 0) {
-                $activity['time_ago'] = $interval->d . ' day' . ($interval->d > 1 ? 's' : '') . ' ago';
+            // Calculate time ago in a more precise way
+            if ($interval->y > 0) {
+                $activity['time_ago'] = $interval->y . ' year' . ($interval->y > 1 ? 's' : '') . ' ago';
+            } elseif ($interval->m > 0) {
+                $activity['time_ago'] = $interval->m . ' month' . ($interval->m > 1 ? 's' : '') . ' ago';
+            } elseif ($interval->d > 0) {
+                if ($interval->d == 1) {
+                    $activity['time_ago'] = 'yesterday';
+                } else if ($interval->d < 7) {
+                    $activity['time_ago'] = $interval->d . ' days ago';
+                } else {
+                    $activity['time_ago'] = ceil($interval->d / 7) . ' week' . (ceil($interval->d / 7) > 1 ? 's' : '') . ' ago';
+                }
             } elseif ($interval->h > 0) {
                 $activity['time_ago'] = $interval->h . ' hour' . ($interval->h > 1 ? 's' : '') . ' ago';
             } elseif ($interval->i > 0) {
                 $activity['time_ago'] = $interval->i . ' minute' . ($interval->i > 1 ? 's' : '') . ' ago';
+            } elseif ($interval->s > 30) {
+                $activity['time_ago'] = $interval->s . ' seconds ago';
             } else {
                 $activity['time_ago'] = 'just now';
             }

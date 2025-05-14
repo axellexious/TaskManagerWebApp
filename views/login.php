@@ -36,6 +36,12 @@
                                     }
                                     unset($_SESSION['errors']);
                                     ?>
+                                    <!-- Dark Mode Toggle Button -->
+                                    <li class="nav-item">
+                                        <a class="nav-link dark-mode-toggle" id="darkModeToggle" title="Switch to Dark Mode">
+                                            <i class="bi bi-moon" id="darkModeIcon"></i>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         <?php endif; ?>

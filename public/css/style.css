@@ -80,3 +80,106 @@ footer {
     margin-bottom: 2px;
   }
 }
+
+/* Dark mode styling
+
+/* Dark mode theme variables */
+:root {
+  --light-bg: #f8f9fa;
+  --light-text: #212529;
+  --light-card: #fff;
+  --light-border: rgba(0, 0, 0, 0.125);
+  --light-hover: rgba(0, 0, 0, 0.03);
+
+  /* Dark mode colors */
+  --dark-bg: #121212;
+  --dark-card: #1e1e1e;
+  --dark-text: #e0e0e0;
+  --dark-border: rgba(255, 255, 255, 0.125);
+  --dark-hover: rgba(255, 255, 255, 0.05);
+}
+
+/* Dark Mode Classes */
+.dark-mode {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .card {
+  background-color: var(--dark-card) !important;
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .card-header {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border-color: var(--dark-border) !important;
+}
+
+.dark-mode .list-group-item {
+  background-color: var(--dark-card) !important;
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .table {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .table-light,
+.dark-mode .table thead {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .table-hover tbody tr:hover {
+  background-color: var(--dark-hover) !important;
+}
+
+.dark-mode .bg-light {
+  background-color: var(--dark-bg) !important;
+}
+
+.dark-mode .text-dark {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .form-control,
+.dark-mode .form-select {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .form-control:focus,
+.dark-mode .form-select:focus {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-mode .task-list-item:hover {
+  background-color: var(--dark-hover) !important;
+}
+
+.dark-mode .modal-content {
+  background-color: var(--dark-card) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Dark mode toggle button styling */
+.dark-mode-toggle {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark-mode-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode-toggle i {
+  font-size: 1.2rem;
+}

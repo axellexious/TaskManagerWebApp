@@ -34,3 +34,6 @@ CREATE TABLE IF NOT EXISTS activities (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
+
+-- Modify tasks table to add archived field
+ALTER TABLE tasks ADD COLUMN archived TINYINT(1) DEFAULT 0;

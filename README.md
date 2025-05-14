@@ -92,70 +92,55 @@ task-manager/
    - Delete tasks
    - Mark tasks as completed
 
-##Order of Functionalities Implemented
+## Order of Functionalities Implemented
 
-1. Core Foundation
+1. **Core Foundation**
+   - Project structure setup with MVC architecture
+   - Database schema creation
+   - Configuration setup
 
--Project structure setup with MVC architecture
--Database schema creation
--Configuration setup
+2. **User Management**
+   - User registration with validation
+   - User login/logout system
+   - Session management
+   - Password hashing and security
 
+3. **Basic Task Management**
+   - Task creation
+   - Task viewing
+   - Task editing
+   - Task deletion
 
-2. User Management
+4. **Advanced Task Features**
+   - Task status toggling (complete/pending)
+   - Task prioritization (Low, Medium, High)
+   - Due date management
+   - Task description support
 
--User registration with validation
--User login/logout system
--Session management
--Password hashing and security
+5. **Dashboard Development**
+   - Task listing with pagination
+   - Task statistics (total, pending, completed)
+   - Filtering by status and priority
+   - Search functionality
 
+6. **Additional Features**
+   - Task archiving functionality
+   - Archived tasks view
+   - Completed tasks view
+   - Activity logging (task creation, updates, etc.)
+   - Recent activity display
 
-3. Basic Task Management
+7. **UI/UX Enhancements**
+   - Responsive design implementation
+   - Bootstrap integration
+   - UI polish (cards, badges, icons)
+   - Form validation and error handling
 
--Task creation
--Task viewing
--Task editing
--Task deletion
-
-
-4. Advanced Task Features
-
--Task status toggling (complete/pending)
--Task prioritization (Low, Medium, High)
--Due date management
--Task description support
-
-
-5. Dashboard Development
-
--Task listing with pagination
--Task statistics (total, pending, completed)
--Filtering by status and priority
--Search functionality
-
-
-6. Additional Features
-
--Task archiving functionality
--Archived tasks view
--Completed tasks view
--Activity logging (task creation, updates, etc.)
--Recent activity display
-
-
-7. UI/UX Enhancements
-
--Responsive design implementation
--Bootstrap integration
--UI polish (cards, badges, icons)
--Form validation and error handling
-
-
-8. Performance & Security
-
--Input sanitization
--PDO for database operations
--User permission checks
--Session security
+8. **Performance & Security**
+   - Input sanitization
+   - PDO for database operations
+   - User permission checks
+   - Session security
 
 ## Contributors
 

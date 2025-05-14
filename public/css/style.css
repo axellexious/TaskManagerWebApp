@@ -1,9 +1,8 @@
-/* Custom styling for Task Manager */
-
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 footer {
@@ -51,7 +50,8 @@ footer {
 
 /* Card shadow effects */
 .card {
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -81,7 +81,7 @@ footer {
   }
 }
 
-/* Dark mode styling
+/* Dark mode styling */
 
 /* Dark mode theme variables */
 :root {
@@ -97,6 +97,7 @@ footer {
   --dark-text: #e0e0e0;
   --dark-border: rgba(255, 255, 255, 0.125);
   --dark-hover: rgba(255, 255, 255, 0.05);
+  --dark-input-bg: #2d2d2d;
 }
 
 /* Dark Mode Classes */
@@ -146,7 +147,7 @@ footer {
 
 .dark-mode .form-control,
 .dark-mode .form-select {
-  background-color: rgba(0, 0, 0, 0.2) !important;
+  background-color: var(--dark-input-bg) !important;
   border-color: var(--dark-border) !important;
   color: var(--dark-text) !important;
 }
@@ -167,19 +168,49 @@ footer {
 
 /* Dark mode toggle button styling */
 .dark-mode-toggle {
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  cursor: pointer !important;
+  padding: 4px 8px !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 36px !important;
+  width: 36px !important;
 }
 
 .dark-mode-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .dark-mode-toggle i {
-  font-size: 1.2rem;
+  font-size: 1.2rem !important;
+}
+
+/* Fix for dark mode toggle visibility in headers */
+.navbar-dark .dark-mode-toggle,
+.bg-primary .dark-mode-toggle {
+  color: white !important;
+}
+
+.dark-mode .navbar {
+  background-color: #0d3865 !important;
+}
+
+.dark-mode .card-header.bg-primary {
+  background-color: #0d3865 !important;
+}
+
+/* Additional styling for form elements in dark mode */
+.dark-mode label {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .text-muted {
+  color: #adb5bd !important;
+}
+
+/* Ensure the footer is visible in dark mode */
+.dark-mode .bg-dark {
+  background-color: #000 !important;
 }

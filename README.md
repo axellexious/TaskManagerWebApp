@@ -92,25 +92,70 @@ task-manager/
    - Delete tasks
    - Mark tasks as completed
 
-## Development Timeline
+##Order of Functionalities Implemented
 
-### Week 1 (Done!)
-- ✅ Project structure setup
-- ✅ Database schema creation
-- ✅ User authentication system (register/login/logout)
-- ✅ Basic dashboard view
+1. Core Foundation
 
-### Week 2 (Ongoing)
-- ✅ Task CRUD operations
-- Dashboard implementation
-- Task listing and filtering
+-Project structure setup with MVC architecture
+-Database schema creation
+-Configuration setup
 
-### Future Weeks
-- Advanced filtering and sorting
-- UI polish
-- Security enhancements
-- Deployment
 
+2. User Management
+
+-User registration with validation
+-User login/logout system
+-Session management
+-Password hashing and security
+
+
+3. Basic Task Management
+
+-Task creation
+-Task viewing
+-Task editing
+-Task deletion
+
+
+4. Advanced Task Features
+
+-Task status toggling (complete/pending)
+-Task prioritization (Low, Medium, High)
+-Due date management
+-Task description support
+
+
+5. Dashboard Development
+
+-Task listing with pagination
+-Task statistics (total, pending, completed)
+-Filtering by status and priority
+-Search functionality
+
+
+6. Additional Features
+
+-Task archiving functionality
+-Archived tasks view
+-Completed tasks view
+-Activity logging (task creation, updates, etc.)
+-Recent activity display
+
+
+7. UI/UX Enhancements
+
+-Responsive design implementation
+-Bootstrap integration
+-UI polish (cards, badges, icons)
+-Form validation and error handling
+
+
+8. Performance & Security
+
+-Input sanitization
+-PDO for database operations
+-User permission checks
+-Session security
 
 ## Contributors
 

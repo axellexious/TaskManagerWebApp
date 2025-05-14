@@ -343,4 +343,148 @@ class Task
 
         return $stmt->fetch();
     }
+
+    // Archive a task instead of deleting it
+    public function archiveTask($task_id, $user_id)
+    {
+        try {
+            $stmt = $this->db->prepare("
+            UPDATE tasks 
+            SET archived = 1
+            WHERE id = :id AND user_id = :user_id
+        ");
+            $stmt->bindParam(':id', $task_id);
+            $stmt->bindParam(':user_id', $user_id);
+
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Restore an archived task
+    public function restoreTask($task_id, $user_id)
+    {
+        try {
+            $stmt = $this->db->prepare("
+            UPDATE tasks 
+            SET archived = 0
+            WHERE id = :id AND user_id = :user_id
+        ");
+            $stmt->bindParam(':id', $task_id);
+            $stmt->bindParam(':user_id', $user_id);
+
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    // Get archived tasks for a user
+    public function getArchivedTasks($user_id, $page = 1, $limit = 10)
+    {
+        $offset = ($page - 1) * $limit;
+
+        $stmt = $this->db->prepare("
+        SELECT * FROM tasks 
+        WHERE user_id = :user_id AND archived = 1
+        ORDER BY due_date DESC
+        LIMIT :limit OFFSET :offset
+    ");
+
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    // Count archived tasks for pagination
+    public function countArchivedTasks($user_id)
+    {
+        $stmt = $this->db->prepare("
+        SELECT COUNT(*) FROM tasks 
+        WHERE user_id = :user_id AND archived = 1
+    ");
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    // Get completed tasks with filtering
+    public function getCompletedTasks($user_id, $priority = null, $date_range = null, $page = 1, $limit = 10)
+    {
+        $query = "
+        SELECT * FROM tasks 
+        WHERE user_id = :user_id AND status = 'Completed' AND archived = 0
+    ";
+
+        $params = [':user_id' => $user_id];
+
+        // Add priority filter if specified
+        if ($priority) {
+            $query .= " AND priority = :priority";
+            $params[':priority'] = $priority;
+        }
+
+        // Add date range filter if specified
+        if ($date_range) {
+            $query .= " AND due_date BETWEEN :start_date AND :end_date";
+            $params[':start_date'] = $date_range['start'];
+            $params[':end_date'] = $date_range['end'];
+        }
+
+        $query .= " ORDER BY due_date DESC LIMIT :limit OFFSET :offset";
+
+        $offset = ($page - 1) * $limit;
+        $stmt = $this->db->prepare($query);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    // Count completed tasks for pagination
+    public function countCompletedTasks($user_id, $priority = null, $date_range = null)
+    {
+        $query = "
+        SELECT COUNT(*) FROM tasks 
+        WHERE user_id = :user_id AND status = 'Completed' AND archived = 0
+    ";
+
+        $params = [':user_id' => $user_id];
+
+        // Add priority filter if specified
+        if ($priority) {
+            $query .= " AND priority = :priority";
+            $params[':priority'] = $priority;
+        }
+
+        // Add date range filter if specified
+        if ($date_range) {
+            $query .= " AND due_date BETWEEN :start_date AND :end_date";
+            $params[':start_date'] = $date_range['start'];
+            $params[':end_date'] = $date_range['end'];
+        }
+
+        $stmt = $this->db->prepare($query);
+
+        // Bind parameters
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
 }

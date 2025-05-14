@@ -40,6 +40,12 @@
                             <i class="bi bi-person"></i> Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
                         </span>
                     </li>
+                    <!-- Dark Mode Toggle Button -->
+                    <li class="nav-item">
+                        <a class="nav-link dark-mode-toggle" id="darkModeToggle" title="Switch to Dark Mode">
+                            <i class="bi bi-moon" id="darkModeIcon"></i>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?action=logout">
                             <i class="bi bi-box-arrow-right"></i> Logout

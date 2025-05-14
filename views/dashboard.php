@@ -19,20 +19,20 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=completed_tasks">
-                        <i class="bi bi-check-circle"></i> Completed Tasks
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?action=archived_tasks">
-                        <i class="bi bi-archive"></i> Archived Tasks
-                    </a>
-                </li>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.php?action=dashboard">
                             <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=completed_tasks">
+                            <i class="bi bi-check-circle"></i> Completed Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?action=archived_tasks">
+                            <i class="bi bi-archive"></i> Archived Tasks
                         </a>
                     </li>
                     <li class="nav-item">

@@ -1,13 +1,13 @@
-// Task Manager Main JavaScript File
-
 document.addEventListener("DOMContentLoaded", function () {
   // Auto-close alerts after 5 seconds
   setTimeout(function () {
     const alerts = document.querySelectorAll(".alert");
     alerts.forEach(function (alert) {
       // Create a new bootstrap alert and close it
-      const bsAlert = new bootstrap.Alert(alert);
-      bsAlert.close();
+      if (bootstrap && bootstrap.Alert) {
+        const bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+      }
     });
   }, 5000);
 
@@ -46,19 +46,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Enable Bootstrap tooltips
-  const tooltipTriggerList = [].slice.call(
-    document.querySelectorAll('[data-bs-toggle="tooltip"]')
-  );
-  tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
+  try {
+    const tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    if (bootstrap && bootstrap.Tooltip) {
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    }
+  } catch (e) {
+    console.error("Error initializing tooltips:", e);
+  }
 
   // Dark mode toggle functionality
   const darkModeToggle = document.getElementById("darkModeToggle");
   const darkModeIcon = document.getElementById("darkModeIcon");
 
-  // Check for saved dark mode preference
+  // Debug dark mode elements
+  console.log("Dark mode toggle element:", darkModeToggle);
+  console.log("Dark mode icon element:", darkModeIcon);
+
+  // Apply dark mode if it was enabled before
   if (localStorage.getItem("darkMode") === "enabled") {
+    console.log("Dark mode was previously enabled, applying...");
     document.body.classList.add("dark-mode");
     if (darkModeIcon) {
       darkModeIcon.classList.remove("bi-moon");
@@ -68,7 +79,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Toggle dark mode on click
   if (darkModeToggle) {
-    darkModeToggle.addEventListener("click", function () {
+    darkModeToggle.addEventListener("click", function (e) {
+      console.log("Dark mode toggle clicked");
+      e.preventDefault(); // Prevent default link behavior
+
       // Toggle dark mode class on body
       document.body.classList.toggle("dark-mode");
 
@@ -78,12 +92,25 @@ document.addEventListener("DOMContentLoaded", function () {
           darkModeIcon.classList.remove("bi-moon");
           darkModeIcon.classList.add("bi-sun");
           localStorage.setItem("darkMode", "enabled");
+          console.log("Dark mode enabled");
         } else {
           darkModeIcon.classList.remove("bi-sun");
           darkModeIcon.classList.add("bi-moon");
           localStorage.setItem("darkMode", "disabled");
+          console.log("Dark mode disabled");
         }
       }
     });
+  } else {
+    console.warn("Dark mode toggle button not found in the DOM");
   }
+
+  // Debug function to manually toggle dark mode (can be triggered from console)
+  window.toggleDarkMode = function () {
+    document.body.classList.toggle("dark-mode");
+    console.log(
+      "Dark mode manually toggled:",
+      document.body.classList.contains("dark-mode")
+    );
+  };
 });

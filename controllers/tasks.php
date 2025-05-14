@@ -302,4 +302,132 @@ class TasksController
         header('Location: index.php?action=dashboard');
         exit();
     }
+    // Show archived tasks
+    public function showArchivedTasks()
+    {
+        // Ensure user is logged in
+        AuthController::requireLogin();
+
+        $user_id = $_SESSION['user_id'];
+        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT) ?: 1;
+        $limit = 10; // Number of tasks per page
+
+        // Get archived tasks
+        $archivedTasks = $this->taskModel->getArchivedTasks($user_id, $page, $limit);
+
+        // Get total count for pagination
+        $totalTasks = $this->taskModel->countArchivedTasks($user_id);
+        $totalPages = ceil($totalTasks / $limit);
+
+        // Prepare pagination data
+        $pagination = [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalTasks' => $totalTasks,
+            'limit' => $limit
+        ];
+
+        include 'views/tasks/archived.php';
+    }
+
+    // Show completed tasks
+    public function showCompletedTasks()
+    {
+        // Ensure user is logged in
+        AuthController::requireLogin();
+
+        $user_id = $_SESSION['user_id'];
+
+        // Get filter parameters
+        $priority = filter_input(INPUT_GET, 'priority', FILTER_SANITIZE_SPECIAL_CHARS);
+        $start_date = filter_input(INPUT_GET, 'start_date', FILTER_SANITIZE_SPECIAL_CHARS);
+        $end_date = filter_input(INPUT_GET, 'end_date', FILTER_SANITIZE_SPECIAL_CHARS);
+        $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT) ?: 1;
+        $limit = 10; // Number of tasks per page
+
+        // Prepare date range filter if provided
+        $date_range = null;
+        if ($start_date && $end_date) {
+            $date_range = [
+                'start' => $start_date,
+                'end' => $end_date
+            ];
+        }
+
+        // Get completed tasks with filters
+        $completedTasks = $this->taskModel->getCompletedTasks($user_id, $priority, $date_range, $page, $limit);
+
+        // Get total count for pagination
+        $totalTasks = $this->taskModel->countCompletedTasks($user_id, $priority, $date_range);
+        $totalPages = ceil($totalTasks / $limit);
+
+        // Prepare pagination data
+        $pagination = [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalTasks' => $totalTasks,
+            'limit' => $limit
+        ];
+
+        include 'views/tasks/completed.php';
+    }
+
+    // Archive task (instead of delete)
+    public function archiveTask()
+    {
+        // Ensure user is logged in
+        AuthController::requireLogin();
+
+        $user_id = $_SESSION['user_id'];
+        $task_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+        if (!$task_id) {
+            $_SESSION['errors'] = ['Invalid task ID'];
+            header('Location: index.php?action=dashboard');
+            exit();
+        }
+
+        // Get task details before archiving for activity log
+        $task = $this->taskModel->getTaskById($task_id, $user_id);
+
+        if ($task && $this->taskModel->archiveTask($task_id, $user_id)) {
+            // Log the activity
+            $this->taskModel->logActivity($user_id, $task_id, 'archive');
+
+            $_SESSION['message'] = "Task archived successfully!";
+        } else {
+            $_SESSION['errors'] = ['Failed to archive task. Please try again.'];
+        }
+
+        header('Location: index.php?action=dashboard');
+        exit();
+    }
+
+    // Restore archived task
+    public function restoreTask()
+    {
+        // Ensure user is logged in
+        AuthController::requireLogin();
+
+        $user_id = $_SESSION['user_id'];
+        $task_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+        if (!$task_id) {
+            $_SESSION['errors'] = ['Invalid task ID'];
+            header('Location: index.php?action=archived_tasks');
+            exit();
+        }
+
+        if ($this->taskModel->restoreTask($task_id, $user_id)) {
+            // Log the activity
+            $this->taskModel->logActivity($user_id, $task_id, 'restore');
+
+            $_SESSION['message'] = "Task restored successfully!";
+        } else {
+            $_SESSION['errors'] = ['Failed to restore task. Please try again.'];
+        }
+
+        header('Location: index.php?action=archived_tasks');
+        exit();
+    }
 }

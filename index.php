@@ -70,6 +70,19 @@ switch ($action) {
     case 'task_toggle_status':
         $tasksController->toggleTaskStatus();
         break;
+    // New routes for archived and completed tasks
+    case 'archived_tasks':
+        $tasksController->showArchivedTasks();
+        break;
+    case 'completed_tasks':
+        $tasksController->showCompletedTasks();
+        break;
+    case 'task_archive':
+        $tasksController->archiveTask();
+        break;
+    case 'task_restore':
+        $tasksController->restoreTask();
+        break;
     default:
         // Default to login page
         $authController->showLogin();

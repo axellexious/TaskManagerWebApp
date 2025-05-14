@@ -19,6 +19,16 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=completed_tasks">
+                        <i class="bi bi-check-circle"></i> Completed Tasks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?action=archived_tasks">
+                        <i class="bi bi-archive"></i> Archived Tasks
+                    </a>
+                </li>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.php?action=dashboard">
@@ -216,9 +226,8 @@
                                                         <a href="index.php?action=task_edit&id=<?php echo $task['id']; ?>" class="btn btn-outline-secondary" title="Edit task">
                                                             <i class="bi bi-pencil"></i>
                                                         </a>
-                                                        <a href="index.php?action=task_delete&id=<?php echo $task['id']; ?>" class="btn btn-outline-danger" title="Delete task"
-                                                            onclick="return confirm('Are you sure you want to delete this task?')">
-                                                            <i class="bi bi-trash"></i>
+                                                        <a href="index.php?action=task_archive&id=<?php echo $task['id']; ?>" class="btn btn-outline-secondary" title="Archive task">
+                                                            <i class="bi bi-archive"></i>
                                                         </a>
                                                     </div>
                                                 </td>

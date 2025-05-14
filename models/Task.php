@@ -23,7 +23,7 @@ class Task
     // Get filtered tasks for a user
     public function getFilteredTasks($user_id, $status = null, $priority = null, $search = null, $page = 1, $limit = 10)
     {
-        $query = "SELECT * FROM tasks WHERE user_id = :user_id";
+        $query = "SELECT * FROM tasks WHERE user_id = :user_id AND archived = 0";
         $params = [':user_id' => $user_id];
 
         // Add filters
@@ -217,6 +217,12 @@ class Task
                     break;
                 case 'reopen':
                     $activity['description'] = 'Reopened task';
+                    break;
+                case 'archive':
+                    $activity['description'] = 'Archived task';
+                    break;
+                case 'restore':
+                    $activity['description'] = 'Restored task';
                     break;
                 default:
                     $activity['description'] = 'Activity on task';

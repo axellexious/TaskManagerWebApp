@@ -52,4 +52,38 @@ document.addEventListener("DOMContentLoaded", function () {
   tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
+
+  // Dark mode toggle functionality
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const darkModeIcon = document.getElementById("darkModeIcon");
+
+  // Check for saved dark mode preference
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    if (darkModeIcon) {
+      darkModeIcon.classList.remove("bi-moon");
+      darkModeIcon.classList.add("bi-sun");
+    }
+  }
+
+  // Toggle dark mode on click
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("click", function () {
+      // Toggle dark mode class on body
+      document.body.classList.toggle("dark-mode");
+
+      // Update icon
+      if (darkModeIcon) {
+        if (document.body.classList.contains("dark-mode")) {
+          darkModeIcon.classList.remove("bi-moon");
+          darkModeIcon.classList.add("bi-sun");
+          localStorage.setItem("darkMode", "enabled");
+        } else {
+          darkModeIcon.classList.remove("bi-sun");
+          darkModeIcon.classList.add("bi-moon");
+          localStorage.setItem("darkMode", "disabled");
+        }
+      }
+    });
+  }
 });

@@ -7,7 +7,7 @@
     <title>Archived Tasks | Task Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link href="public/css/styles.css" rel="stylesheet">
+    <link href="public/css/style.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
@@ -39,6 +39,11 @@
                         <span class="nav-link">
                             <i class="bi bi-person"></i> Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>
                         </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dark-mode-toggle" id="darkModeToggle" title="Switch to Dark Mode">
+                            <i class="bi bi-moon" id="darkModeIcon"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?action=logout">
